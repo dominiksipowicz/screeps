@@ -8,13 +8,26 @@ var creepController = {
 
     checkCreepsCount: function() {
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == CREEP_ROLE.harvester);
-        //console.log('Harvesters: ' + harvesters.length);
+        var builders = _.filter(Game.creeps, (creep) => creep.memory.role == CREEP_ROLE.builder);
+        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == CREEP_ROLE.upgrader);
 
-        if(harvesters.length < 4) {
-            var newName = CREEP_ROLE.harvester + Game.time;
-            console.log('Spawning new harvester: ' + newName);
-            Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName,
-                {memory: {role: CREEP_ROLE.harvester}});
+        if (harvesters.length < 2) {
+            creepController.createCreep(CREEP_ROLE.harvester);
+        } else {
+            if (upgraders < 2) {
+                creepController.createCreep(CREEP_ROLE.upgrader);
+            }
+            if (builders < 2) {
+                creepController.createCreep(CREEP_ROLE.builder);
+            } else {
+                if (harvesters.length < 4) {
+                    creepController.createCreep(CREEP_ROLE.harvester);
+                } else {
+                    if (upgraders < 5) {
+                        creepController.createCreep(CREEP_ROLE.upgrader);
+                    }
+                }
+            }
         }
     },
 
@@ -27,6 +40,13 @@ var creepController = {
                 Game.spawns['Spawn1'].pos.y,
                 {align: 'left', opacity: 0.8});
         }
+    },
+
+    createCreep: function (type) {
+        var newName = type + Game.time;
+        console.log('Spawning new harvester: ' + newName);
+        Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName,
+            {memory: {role: type}});
     }
 
 
