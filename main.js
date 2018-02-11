@@ -2,6 +2,12 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 
+const CREEP_ROLE = {
+  harvester: 'harvester',
+  upgrader: 'upgrader',
+  builder: 'builder'
+};
+
 module.exports.loop = function () {
 
     var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
@@ -25,17 +31,11 @@ module.exports.loop = function () {
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
-        // TODO: switch
-        if (creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
-        }
-        if (creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        }
-        if (creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
+        switch(creep.memory.role) {
+            case CREEP_ROLE.harvester: roleHarvester.run(creep); break;
+            case CREEP_ROLE.upgrader: roleUpgrader.run(creep); break;
+            case CREEP_ROLE.builder: roleBuilder.run(creep); break;
         }
     }
 };
-
 
