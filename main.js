@@ -11,6 +11,8 @@ const CREEP_ROLE = {
 
 module.exports.loop = function () {
 
+    var roomName = Game.spawns['Spawn1'].room.name;
+
     creepController.checkCreepsCount();
     creepController.visualizaCreepSpawning();
 
